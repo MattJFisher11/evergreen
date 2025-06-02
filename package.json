@@ -1,0 +1,26 @@
+{
+  "name": "evergreen",
+  "version": "1.0.0",
+  "description": "evergreen-earth-tech-exercise",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MattJFisher11/evergreen.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MattJFisher11/evergreen/issues"
+  },
+  "homepage": "https://github.com/MattJFisher11/evergreen#readme",
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "dependencies": {
+    "node-fetch": "^3.3.2"
+  }
+}
