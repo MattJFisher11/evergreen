@@ -26,24 +26,29 @@ async function processHouse(house) {
             const powerHeatLoss = heatLoss / degreeDays;
             //finds the first heat pump from the list that meats the condition.
             const pump = heatPumpData.find(p => p.outputCapacity >= powerHeatLoss);
-            // combines all elements into a single result and add the cost up starting from 0
-            const subtotal = pump.costs.reduce((sum, c) => sum + c.cost, 0);
-            // Create an array of formatted cost item strings "label, amount") for display
-            const costs = pump.costs.map(pumpCost => `${pumpCost.label}, £${pumpCost.cost}`);
-            //calculates the total amount with vat
-            const totalWithVAT = (0.05 * subtotal) + subtotal;
-            return `
-            --------------------------------------
-            ${submissionId}
-            --------------------------------------
-            Estimated Heat Loss = ${heatLoss.toFixed(2) + "kWh"}
-            Design Region = ${designRegion}
-            Power Heat Loss = ${powerHeatLoss.toFixed(2)+ "kW"}
-            Recommended Heat Pump = ${pump.label}
-            Cost Breakdown
-            ${costs}
-            Total Cost, including VAT = £${totalWithVAT};
-            `
+            if (!pump) {
+                //if no pump is found to meet requirements throw error
+                throw new Error("No suitable heat pump found");
+            }else{
+                // combines all elements into a single result and add the cost up starting from 0
+                const subtotal = pump.costs.reduce((sum, c) => sum + c.cost, 0);
+                // Create an array of formatted cost item strings "label, amount") for display
+                const costs = pump.costs.map(pumpCost => `${pumpCost.label}, £${pumpCost.cost}`).join('\n\t\t');
+                //calculates the total amount with vat
+                const totalWithVAT = (0.05 * subtotal) + subtotal;
+                return `
+                --------------------------------------
+                ${submissionId}
+                --------------------------------------
+                Estimated Heat Loss = ${heatLoss.toFixed(2) + "kWh"}
+                Design Region = ${designRegion}
+                Power Heat Loss = ${powerHeatLoss.toFixed(2)+ "kW"}
+                Recommended Heat Pump = ${pump.label}
+                Cost Breakdown
+                ${costs}
+                Total Cost, including VAT = £${totalWithVAT};
+                `
+                }
         }else if (res.status === 404){
             return `
             --------------------------------------
@@ -52,9 +57,11 @@ async function processHouse(house) {
             Heating Loss: ${heatLoss.toFixed(2)}
             Warning: Could not find design region \n`;
         }else{
-             throw new Error(`API error: ${res.statusText}`)
+              // throws error message including the response status code
+             throw new Error(`API error: ${res.status}`)
         }
     }catch (err) {
+        // throws error message including the submission ID and error details
         return `Error processing submission ${submissionId}: ${err.message}`;
     }
 }
