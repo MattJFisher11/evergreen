@@ -3,16 +3,18 @@
   "version": "1.0.0",
   "description": "evergreen-earth-tech-exercise",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/index.js",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/MattJFisher11/evergreen.git"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Matthew Fisher",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/MattJFisher11/evergreen/issues"
   },
