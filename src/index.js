@@ -9,7 +9,21 @@ const API_KEY = 'f661f74e-20a7-4e9f-acfc-041cfb846505';
 const WEATHER_API = 'https://063qqrtqth.execute-api.eu-west-2.amazonaws.com/v1/weather?location=';
 
 async function processHouse(house) {
-    return house
+    const { submissionId, floorArea, heatingFactor, insulationFactor, designRegion} = house;
+    const heatLoss = floorArea * heatingFactor * insulationFactor;
+    console.log(heatLoss)
+    try {
+        const res = await fetch(`${WEATHER_API}${encodeURIComponent(designRegion)}`,
+        {headers: {'x-api-key': API_KEY}})
+
+        if (res.status === 200) {
+            return await res.json();
+        }else {
+            throw new Error(`API error: ${res.statusText}`);
+        }
+    }catch (err) {
+        return `Error processing submission ${submissionId}: ${err.message}`;
+    }
 }
 
 async function main() {
