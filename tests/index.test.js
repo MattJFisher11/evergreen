@@ -1,6 +1,10 @@
 import {jest} from '@jest/globals';
 
-// Now import the actual module under test (after mocking)
+// Mock fetch using jest.unstable_mockModule
+const fetchMock = jest.fn();
+await jest.unstable_mockModule('node-fetch', () => ({default: fetchMock}));
+
+// Now import the actual module under test after mocking due to throwing console.log erros being thrown
 const {processHouse} = await import('../src/index.js');
 
 // Sample weather data for mocking
@@ -34,20 +38,29 @@ const suitableHouse = {
 };
 
 describe('Test Heat Pump Validity', () => {
+  beforeEach(() => {
+    fetchMock.mockReset();
+  });
 
   it('returns expected output for valid heat pump', async () => {
   
   });
 
   it('returns error message when no suitable heat pump found', async () => {
-
+    fetchMock.mockResolvedValueOnce({status: 200,json: async () => mockWeatherData});
+    const result = await processHouse(noSuitableHouse);
+    expect(result).toContain('No suitable heat pump found');
   });
 
   it('returns expected output when 404', async () => {
-
+    fetchMock.mockResolvedValueOnce({status: 404,json: async () => mockWeatherData});
+    const result = await processHouse(suitableHouse);
+    expect(result).toContain("Warning: Could not find design region")
   });
 
   it('returns error message when 500 status is returned', async () => {
-
+    fetchMock.mockResolvedValueOnce({status: 500,json: async () => mockWeatherData});
+    const result = await processHouse(suitableHouse);
+    expect(result).toEqual("Error processing submission Suitable: API error: 500")
   });
 });
