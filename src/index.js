@@ -1,5 +1,6 @@
 import fetch from 'node-fetch';
 import {readFile} from 'fs/promises';
+export { processHouse };
 
 //json data
 const heatPumpData = JSON.parse(await readFile('data/heat-pumps.json', 'utf-8'));
@@ -72,5 +73,4 @@ async function main() {
         console.log(output);
     }
 }
-
 main();

@@ -6,7 +6,10 @@
   "type": "module",
   "scripts": {
     "start": "node src/index.js",
-    "test": "jest"
+    "test": "node --experimental-vm-modules node_modules/.bin/jest"
+  },
+  "jest": {
+    "testEnvironment": "node"
   },
   "repository": {
     "type": "git",
@@ -20,6 +23,7 @@
   },
   "homepage": "https://github.com/MattJFisher11/evergreen#readme",
   "devDependencies": {
+    "@jest/globals": "^30.0.0-beta.3",
     "jest": "^29.7.0"
   },
   "dependencies": {
