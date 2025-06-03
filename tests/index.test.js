@@ -43,7 +43,19 @@ describe('Test Heat Pump Validity', () => {
   });
 
   it('returns expected output for valid heat pump', async () => {
-  
+    fetchMock.mockResolvedValueOnce({status: 200,json: async () => mockWeatherData});
+    const result = await processHouse(suitableHouse);
+    expect(result).toContain(suitableHouse.submissionId);
+    expect(result).toContain(`Estimated Heat Loss = 96.00kWh`);
+    expect(result).toContain(`Design Region = ${suitableHouse.designRegion}`);
+    expect(result).toContain(`Power Heat Loss = 0.05kW`);
+    expect(result).toContain(`Cost Breakdown`);
+    expect(result).toContain(`Design & Supply of your Air Source Heat Pump System Components (8kW), £4216`);
+    expect(result).toContain(`Installation of your Air Source Heat Pump and Hot Water Cylinder, £2900`);
+    expect(result).toContain(`Supply & Installation of your Homely Smart Thermostat, £150`);
+    expect(result).toContain(`Supply & Installation of a new Consumer Unit, £300`);
+    expect(result).toContain(`MCS System Commissioning & HIES Insurance-backed Warranty, £1648`);
+    expect(result).toContain(`Total Cost, including VAT = £9674.7`);
   });
 
   it('returns error message when no suitable heat pump found', async () => {

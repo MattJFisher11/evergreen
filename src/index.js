@@ -52,11 +52,11 @@ async function processHouse(house) {
                 }
         }else if (res.status === 404){
             return `
-            --------------------------------------
-            ${submissionId}
-            --------------------------------------
-            Heating Loss: ${heatLoss.toFixed(2)}
-            Warning: Could not find design region \n`;
+                --------------------------------------
+                ${submissionId}
+                --------------------------------------
+                Heating Loss: ${heatLoss.toFixed(2)}
+                Warning: Could not find design region \n`;
         }else{
               // throws error message including the response status code
              throw new Error(`API error: ${res.status}`)
